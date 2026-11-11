@@ -1,0 +1,27 @@
+name: Verify application
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@1e60f620b9541d6c2068d792ac9313bdaee5b8c1 # v4.0.3
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/setup-python@42375524e23c9c9be4bca6da8cc2c7e1d896a5f6 # v5.3.0
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r api/requirements.txt
+      - run: python -c "import sys; sys.path.insert(0, 'api'); import main; assert main.app.title == 'ISPSC Alumni Connect API'"

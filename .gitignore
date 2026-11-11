@@ -1,0 +1,10 @@
+node_modules
+dist
+.env*
+!.env.example
+!api/.env.example
+api/.venv
+__pycache__
+*.pyc
+.venv
+work
