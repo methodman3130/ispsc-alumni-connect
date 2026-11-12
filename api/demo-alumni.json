@@ -1,0 +1,608 @@
+{
+  "description": "Fictional, non-login alumni profiles for local testing.",
+  "profiles": [
+    {
+      "name": "Avery Sample 2015",
+      "email": "avery.2015.1@demo.alumni",
+      "student_number": "DEMO-2015-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2015,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2015",
+      "email": "bela.2015.2@demo.alumni",
+      "student_number": "DEMO-2015-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2015,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2015",
+      "email": "cian.2015.3@demo.alumni",
+      "student_number": "DEMO-2015-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2015,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2016",
+      "email": "avery.2016.1@demo.alumni",
+      "student_number": "DEMO-2016-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2016,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2016",
+      "email": "bela.2016.2@demo.alumni",
+      "student_number": "DEMO-2016-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2016,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2016",
+      "email": "cian.2016.3@demo.alumni",
+      "student_number": "DEMO-2016-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2016,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2017",
+      "email": "avery.2017.1@demo.alumni",
+      "student_number": "DEMO-2017-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2017,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2017",
+      "email": "bela.2017.2@demo.alumni",
+      "student_number": "DEMO-2017-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2017,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2017",
+      "email": "cian.2017.3@demo.alumni",
+      "student_number": "DEMO-2017-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2017,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2018",
+      "email": "avery.2018.1@demo.alumni",
+      "student_number": "DEMO-2018-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2018,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2018",
+      "email": "bela.2018.2@demo.alumni",
+      "student_number": "DEMO-2018-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2018,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2018",
+      "email": "cian.2018.3@demo.alumni",
+      "student_number": "DEMO-2018-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2018,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2019",
+      "email": "avery.2019.1@demo.alumni",
+      "student_number": "DEMO-2019-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2019,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2019",
+      "email": "bela.2019.2@demo.alumni",
+      "student_number": "DEMO-2019-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2019,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2019",
+      "email": "cian.2019.3@demo.alumni",
+      "student_number": "DEMO-2019-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2019,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2020",
+      "email": "avery.2020.1@demo.alumni",
+      "student_number": "DEMO-2020-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2020,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2020",
+      "email": "bela.2020.2@demo.alumni",
+      "student_number": "DEMO-2020-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2020,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2020",
+      "email": "cian.2020.3@demo.alumni",
+      "student_number": "DEMO-2020-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2020,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2021",
+      "email": "avery.2021.1@demo.alumni",
+      "student_number": "DEMO-2021-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2021,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2021",
+      "email": "bela.2021.2@demo.alumni",
+      "student_number": "DEMO-2021-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2021,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2021",
+      "email": "cian.2021.3@demo.alumni",
+      "student_number": "DEMO-2021-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2021,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2022",
+      "email": "avery.2022.1@demo.alumni",
+      "student_number": "DEMO-2022-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2022,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2022",
+      "email": "bela.2022.2@demo.alumni",
+      "student_number": "DEMO-2022-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2022,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2022",
+      "email": "cian.2022.3@demo.alumni",
+      "student_number": "DEMO-2022-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2022,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2023",
+      "email": "avery.2023.1@demo.alumni",
+      "student_number": "DEMO-2023-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2023,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2023",
+      "email": "bela.2023.2@demo.alumni",
+      "student_number": "DEMO-2023-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2023,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2023",
+      "email": "cian.2023.3@demo.alumni",
+      "student_number": "DEMO-2023-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2023,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2024",
+      "email": "avery.2024.1@demo.alumni",
+      "student_number": "DEMO-2024-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2024,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2024",
+      "email": "bela.2024.2@demo.alumni",
+      "student_number": "DEMO-2024-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2024,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2024",
+      "email": "cian.2024.3@demo.alumni",
+      "student_number": "DEMO-2024-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2024,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Avery Sample 2025",
+      "email": "avery.2025.1@demo.alumni",
+      "student_number": "DEMO-2025-01",
+      "degree": "BS Information Technology",
+      "major": "Information Technology",
+      "batch_year": 2025,
+      "job_title": "Systems Analyst",
+      "company": "Sample Organization",
+      "location": "Vigan City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Bela Sample 2025",
+      "email": "bela.2025.2@demo.alumni",
+      "student_number": "DEMO-2025-02",
+      "degree": "BS Accountancy",
+      "major": "Accountancy",
+      "batch_year": 2025,
+      "job_title": "Finance Associate",
+      "company": "Sample Organization",
+      "location": "Baguio City",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    },
+    {
+      "name": "Cian Sample 2025",
+      "email": "cian.2025.3@demo.alumni",
+      "student_number": "DEMO-2025-03",
+      "degree": "BS Agriculture",
+      "major": "Agriculture",
+      "batch_year": 2025,
+      "job_title": "Program Coordinator",
+      "company": "Sample Organization",
+      "location": "Ilocos Sur",
+      "bio": "Fictional profile generated for the ISPSC Alumni Connect demonstration.",
+      "directory_visible": "alumni"
+    }
+  ],
+  "accepted_connections": [
+    [
+      "2015-1",
+      "2015-2"
+    ],
+    [
+      "2015-1",
+      "2016-1"
+    ],
+    [
+      "2015-2",
+      "2015-3"
+    ],
+    [
+      "2015-3",
+      "2015-1"
+    ],
+    [
+      "2016-1",
+      "2016-2"
+    ],
+    [
+      "2016-1",
+      "2017-1"
+    ],
+    [
+      "2016-2",
+      "2016-3"
+    ],
+    [
+      "2016-3",
+      "2016-1"
+    ],
+    [
+      "2017-1",
+      "2017-2"
+    ],
+    [
+      "2017-1",
+      "2018-1"
+    ],
+    [
+      "2017-2",
+      "2017-3"
+    ],
+    [
+      "2017-3",
+      "2017-1"
+    ],
+    [
+      "2018-1",
+      "2018-2"
+    ],
+    [
+      "2018-1",
+      "2019-1"
+    ],
+    [
+      "2018-2",
+      "2018-3"
+    ],
+    [
+      "2018-3",
+      "2018-1"
+    ],
+    [
+      "2019-1",
+      "2019-2"
+    ],
+    [
+      "2019-1",
+      "2020-1"
+    ],
+    [
+      "2019-2",
+      "2019-3"
+    ],
+    [
+      "2019-3",
+      "2019-1"
+    ],
+    [
+      "2020-1",
+      "2020-2"
+    ],
+    [
+      "2020-1",
+      "2021-1"
+    ],
+    [
+      "2020-2",
+      "2020-3"
+    ],
+    [
+      "2020-3",
+      "2020-1"
+    ],
+    [
+      "2021-1",
+      "2021-2"
+    ],
+    [
+      "2021-1",
+      "2022-1"
+    ],
+    [
+      "2021-2",
+      "2021-3"
+    ],
+    [
+      "2021-3",
+      "2021-1"
+    ],
+    [
+      "2022-1",
+      "2022-2"
+    ],
+    [
+      "2022-1",
+      "2023-1"
+    ],
+    [
+      "2022-2",
+      "2022-3"
+    ],
+    [
+      "2022-3",
+      "2022-1"
+    ],
+    [
+      "2023-1",
+      "2023-2"
+    ],
+    [
+      "2023-1",
+      "2024-1"
+    ],
+    [
+      "2023-2",
+      "2023-3"
+    ],
+    [
+      "2023-3",
+      "2023-1"
+    ],
+    [
+      "2024-1",
+      "2024-2"
+    ],
+    [
+      "2024-1",
+      "2025-1"
+    ],
+    [
+      "2024-2",
+      "2024-3"
+    ],
+    [
+      "2024-3",
+      "2024-1"
+    ],
+    [
+      "2025-1",
+      "2025-2"
+    ],
+    [
+      "2025-2",
+      "2025-3"
+    ],
+    [
+      "2025-3",
+      "2025-1"
+    ]
+  ]
+}

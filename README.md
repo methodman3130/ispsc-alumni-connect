@@ -39,6 +39,22 @@ The first backend request automatically creates the database tables. For product
 
 Registration and sign-in use the FastAPI service. The alumni directory is populated from the database for authenticated users; it is not a static demo list. An administrator account can be created by updating a user's role in the database to `admin`.
 
-## Sample accounts
+## Fictional demo community
 
-For development, run `python api/seed.py` after configuring `DATABASE_URL`. This creates one administrator and four graduate accounts, all with the temporary password `ChangeMe2026!`. See [DEPLOYMENT.md](DEPLOYMENT.md) for the full GitHub, Neon, and Vercel deployment guide.
+Use the repeatable demo seeder to add 33 fictional alumni profiles (three per
+batch from 2015–2025) and accepted connections between them. It skips records
+that already exist, never modifies ordinary alumni accounts, and gives each
+demo profile a generated password that is not printed.
+
+```bash
+python api/demo_seed.py
+```
+
+For a portable, non-sensitive download that can accompany localhost testing:
+
+```bash
+python api/demo_seed.py --export demo-alumni.json
+```
+
+For a separate local SQLite database, set `DATABASE_URL=sqlite:///./alumni_demo.db`
+in `api/.env` (or your shell) before running the seeder. See [DEPLOYMENT.md](DEPLOYMENT.md) for the full GitHub, Neon, and Vercel deployment guide.
