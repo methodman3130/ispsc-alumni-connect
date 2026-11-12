@@ -2,6 +2,8 @@
 
 A responsive alumni community platform for finding classmates, seeing where graduates are working, and keeping alumni records current.
 
+For member-facing instructions, see the [User Manual](USER_MANUAL.md).
+
 ## Stack
 - **Frontend:** React 18, Vite, Tailwind CSS, Lucide icons
 - **Backend:** FastAPI, SQLAlchemy, PostgreSQL / Neon
