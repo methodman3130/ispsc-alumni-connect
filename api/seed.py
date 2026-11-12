@@ -8,7 +8,7 @@ Never run this command against a live production database.
 """
 from datetime import datetime, timezone
 
-from main import Alumni, SessionLocal, pwd_context
+from main import Alumni, SessionLocal, hash_password
 
 SAMPLE_PASSWORD = "ChangeMe2026!"
 SAMPLE_USERS = [
@@ -48,7 +48,7 @@ def main():
                 continue
             db.add(Alumni(
                 **item,
-                password_hash=pwd_context.hash(SAMPLE_PASSWORD),
+                password_hash=hash_password(SAMPLE_PASSWORD),
                 consent_at=datetime.now(timezone.utc),
                 directory_visible="alumni",
             ))

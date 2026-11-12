@@ -3,12 +3,12 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
+import bcrypt
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import DateTime, Integer, String, Text, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
@@ -25,8 +25,19 @@ if ENVIRONMENT in {"production", "preview"} or os.getenv("VERCEL_ENV"):
 ALGORITHM = "HS256"
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
+
+def hash_password(password: str) -> str:
+    try:
+        return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    except ValueError as error:
+        raise HTTPException(422, "Password must be at most 72 bytes long") from error
+
+def verify_password(password: str, password_hash: str) -> bool:
+    try:
+        return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
+    except ValueError:
+        return False
 
 class Base(DeclarativeBase): pass
 class Alumni(Base):
@@ -90,13 +101,13 @@ def health(): return {"status":"ok"}
 @app.post("/api/auth/register", status_code=status.HTTP_201_CREATED)
 def register(data: RegisterIn, db: Session=Depends(db_session)):
     if db.scalar(select(Alumni).where(Alumni.email==data.email)): raise HTTPException(409,"Email is already registered")
-    alum=Alumni(name=data.name,email=data.email,password_hash=pwd_context.hash(data.password),degree=data.degree,batch_year=data.batch,consent_at=datetime.now(timezone.utc))
+    alum=Alumni(name=data.name,email=data.email,password_hash=hash_password(data.password),degree=data.degree,batch_year=data.batch,consent_at=datetime.now(timezone.utc))
     db.add(alum); db.commit(); db.refresh(alum)
     return {"access_token":token_for(alum),"token_type":"bearer","user":public(alum)}
 @app.post("/api/auth/login")
 def login(data: LoginIn, db: Session=Depends(db_session)):
     alum=db.scalar(select(Alumni).where(Alumni.email==data.email))
-    if not alum or not pwd_context.verify(data.password,alum.password_hash): raise HTTPException(401,"Incorrect email or password")
+    if not alum or not verify_password(data.password,alum.password_hash): raise HTTPException(401,"Incorrect email or password")
     return {"access_token":token_for(alum),"token_type":"bearer","user":public(alum)}
 @app.get("/api/me")
 def me(user: Alumni=Depends(current_user)): return public(user)
