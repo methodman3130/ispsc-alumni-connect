@@ -237,7 +237,8 @@ def request_connection(alumni_id: int, db: Session=Depends(db_session), user: Al
 @app.post("/api/connections/{connection_id}/accept")
 def accept_connection(connection_id: int, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
     row = db.get(Connection, connection_id)
-    if not row or row.recipient_id != user.id: raise HTTPException(404, "Connection request not found")
+    if not row: raise HTTPException(404, "Connection request not found")
+    if row.recipient_id != user.id: raise HTTPException(403, "Only the recipient can accept this connection request")
     row.status = "accepted"; db.commit(); db.refresh(row)
     other = db.get(Alumni, row.requester_id)
     return connection_public(row, other)
