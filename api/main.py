@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import DateTime, Integer, String, Text, create_engine, select
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, UniqueConstraint, create_engine, or_, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 load_dotenv(Path(__file__).with_name(".env"))
@@ -59,6 +59,15 @@ class Alumni(Base):
     consent_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
+class Connection(Base):
+    __tablename__ = "connections"
+    __table_args__ = (UniqueConstraint("requester_id", "recipient_id", name="uq_connection_direction"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    requester_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"), index=True)
+    recipient_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"), index=True)
+    status: Mapped[str] = mapped_column(String(20), default="pending")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
 Base.metadata.create_all(bind=engine)
 class RegisterIn(BaseModel):
     name: str = Field(min_length=2, max_length=160)
@@ -83,6 +92,8 @@ def db_session():
     finally: db.close()
 def public(a: Alumni):
     return {"id":a.id,"name":a.name,"degree":a.degree,"major":a.major,"batch_year":a.batch_year,"job_title":a.job_title,"company":a.company,"location":a.location,"bio":a.bio,"role":a.role,"directory_visible":a.directory_visible}
+def connection_public(connection: Connection, other: Alumni):
+    return {"id": connection.id, "status": connection.status, "created_at": connection.created_at, "alumni": public(other)}
 def token_for(a: Alumni):
     exp=datetime.now(timezone.utc)+timedelta(days=7)
     return jwt.encode({"sub":str(a.id),"role":a.role,"exp":exp},JWT_SECRET,algorithm=ALGORITHM)
@@ -123,6 +134,38 @@ def directory(q: str="", batch: Optional[int]=None, db: Session=Depends(db_sessi
         term=f"%{q.lower()}%"
         stmt=stmt.where((Alumni.name.ilike(term)) | (Alumni.degree.ilike(term)) | (Alumni.job_title.ilike(term)) | (Alumni.company.ilike(term)))
     return [public(a) for a in db.scalars(stmt.order_by(Alumni.name).limit(100)).all()]
+@app.get("/api/connections")
+def connections(db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    rows = db.scalars(select(Connection).where(or_(Connection.requester_id == user.id, Connection.recipient_id == user.id)).order_by(Connection.created_at.desc())).all()
+    result = []
+    for row in rows:
+        other = db.get(Alumni, row.recipient_id if row.requester_id == user.id else row.requester_id)
+        if other:
+            item = connection_public(row, other)
+            item["direction"] = "outgoing" if row.requester_id == user.id else "incoming"
+            result.append(item)
+    return result
+@app.post("/api/connections/{alumni_id}", status_code=status.HTTP_201_CREATED)
+def request_connection(alumni_id: int, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    if alumni_id == user.id: raise HTTPException(400, "You cannot connect with your own profile")
+    other = db.get(Alumni, alumni_id)
+    if not other or other.directory_visible == "private": raise HTTPException(404, "Alumni profile not found")
+    existing = db.scalar(select(Connection).where(or_((Connection.requester_id == user.id) & (Connection.recipient_id == alumni_id), (Connection.requester_id == alumni_id) & (Connection.recipient_id == user.id))))
+    if existing:
+        if existing.requester_id == alumni_id and existing.status == "pending":
+            existing.status = "accepted"; db.commit(); db.refresh(existing)
+            return connection_public(existing, other)
+        raise HTTPException(409, "A connection request already exists")
+    row = Connection(requester_id=user.id, recipient_id=alumni_id)
+    db.add(row); db.commit(); db.refresh(row)
+    return connection_public(row, other)
+@app.post("/api/connections/{connection_id}/accept")
+def accept_connection(connection_id: int, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    row = db.get(Connection, connection_id)
+    if not row or row.recipient_id != user.id: raise HTTPException(404, "Connection request not found")
+    row.status = "accepted"; db.commit(); db.refresh(row)
+    other = db.get(Alumni, row.requester_id)
+    return connection_public(row, other)
 @app.get("/api/admin/overview")
 def admin_overview(db: Session=Depends(db_session), _: Alumni=Depends(admin_only)):
     people=db.scalars(select(Alumni)).all()
