@@ -8,7 +8,15 @@ const initials = (name = '') => name.split(/\s+/).map((part) => part[0]).join(''
 async function request(path, options = {}) {
   const response = await fetch(`${API_URL}${path}`, options)
   const data = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(data.detail || 'Something went wrong. Please try again.')
+  if (!response.ok) {
+    const detail = data.detail
+    const message = Array.isArray(detail)
+      ? detail.map((item) => item.msg || 'Invalid input').join(' ')
+      : typeof detail === 'string'
+        ? detail
+        : 'Something went wrong. Please try again.'
+    throw new Error(message)
+  }
   return data
 }
 function Field({ label, ...props }) { return <label className="block text-sm font-medium text-slate-700">{label}<input {...props} className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 outline-none focus:border-forest focus:ring-2 focus:ring-emerald-100" /></label> }
