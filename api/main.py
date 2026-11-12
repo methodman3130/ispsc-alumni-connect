@@ -68,6 +68,66 @@ class Connection(Base):
     status: Mapped[str] = mapped_column(String(20), default="pending")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
+class Message(Base):
+    __tablename__ = "messages"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    sender_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"), index=True)
+    recipient_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"), index=True)
+    body: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+class Group(Base):
+    __tablename__ = "groups"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(120), unique=True)
+    description: Mapped[str] = mapped_column(Text, default="")
+    owner_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+class GroupMembership(Base):
+    __tablename__ = "group_memberships"
+    __table_args__ = (UniqueConstraint("group_id", "alumni_id", name="uq_group_member"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id"), index=True)
+    alumni_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"), index=True)
+
+class Event(Base):
+    __tablename__ = "events"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    title: Mapped[str] = mapped_column(String(180))
+    details: Mapped[str] = mapped_column(Text, default="")
+    location: Mapped[str] = mapped_column(String(180), default="")
+    starts_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    created_by: Mapped[int] = mapped_column(ForeignKey("alumni.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+class EventRsvp(Base):
+    __tablename__ = "event_rsvps"
+    __table_args__ = (UniqueConstraint("event_id", "alumni_id", name="uq_event_rsvp"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), index=True)
+    alumni_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"), index=True)
+
+class Opportunity(Base):
+    __tablename__ = "opportunities"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    title: Mapped[str] = mapped_column(String(180))
+    company: Mapped[str] = mapped_column(String(180))
+    description: Mapped[str] = mapped_column(Text, default="")
+    location: Mapped[str] = mapped_column(String(180), default="")
+    employment_type: Mapped[str] = mapped_column(String(60), default="Full-time")
+    created_by: Mapped[int] = mapped_column(ForeignKey("alumni.id"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+class OpportunityApplication(Base):
+    __tablename__ = "opportunity_applications"
+    __table_args__ = (UniqueConstraint("opportunity_id", "alumni_id", name="uq_opportunity_application"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    opportunity_id: Mapped[int] = mapped_column(ForeignKey("opportunities.id"), index=True)
+    alumni_id: Mapped[int] = mapped_column(ForeignKey("alumni.id"), index=True)
+    note: Mapped[str] = mapped_column(Text, default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
 Base.metadata.create_all(bind=engine)
 class RegisterIn(BaseModel):
     name: str = Field(min_length=2, max_length=160)
@@ -82,6 +142,19 @@ class ProfileUpdate(BaseModel):
     student_number: Optional[str] = None; degree: Optional[str] = None; major: Optional[str] = None
     batch_year: Optional[int] = None; job_title: Optional[str] = None; company: Optional[str] = None
     location: Optional[str] = None; bio: Optional[str] = None; directory_visible: Optional[str] = None
+class MessageIn(BaseModel):
+    recipient_id: int; body: str = Field(min_length=1, max_length=2000)
+class GroupIn(BaseModel):
+    name: str = Field(min_length=3, max_length=120); description: str = Field(default="", max_length=1000)
+class EventIn(BaseModel):
+    title: str = Field(min_length=3, max_length=180); details: str = Field(default="", max_length=2000)
+    location: str = Field(default="", max_length=180); starts_at: datetime
+class OpportunityIn(BaseModel):
+    title: str = Field(min_length=3, max_length=180); company: str = Field(min_length=2, max_length=180)
+    description: str = Field(default="", max_length=2000); location: str = Field(default="", max_length=180)
+    employment_type: str = Field(default="Full-time", max_length=60)
+class ApplicationIn(BaseModel):
+    note: str = Field(default="", max_length=2000)
 
 app = FastAPI(title="ISPSC Alumni Connect API")
 allowed_origins = [origin.strip() for origin in os.getenv("FRONTEND_ORIGIN", "http://localhost:5173").split(",") if origin.strip()]
@@ -92,6 +165,8 @@ def db_session():
     finally: db.close()
 def public(a: Alumni):
     return {"id":a.id,"name":a.name,"degree":a.degree,"major":a.major,"batch_year":a.batch_year,"job_title":a.job_title,"company":a.company,"location":a.location,"bio":a.bio,"role":a.role,"directory_visible":a.directory_visible}
+def private(a: Alumni):
+    data = public(a); data.update({"email": a.email, "student_number": a.student_number}); return data
 def connection_public(connection: Connection, other: Alumni):
     return {"id": connection.id, "status": connection.status, "created_at": connection.created_at, "alumni": public(other)}
 def token_for(a: Alumni):
@@ -114,18 +189,18 @@ def register(data: RegisterIn, db: Session=Depends(db_session)):
     if db.scalar(select(Alumni).where(Alumni.email==data.email)): raise HTTPException(409,"Email is already registered")
     alum=Alumni(name=data.name,email=data.email,password_hash=hash_password(data.password),degree=data.degree,batch_year=data.batch,consent_at=datetime.now(timezone.utc))
     db.add(alum); db.commit(); db.refresh(alum)
-    return {"access_token":token_for(alum),"token_type":"bearer","user":public(alum)}
+    return {"access_token":token_for(alum),"token_type":"bearer","user":private(alum)}
 @app.post("/api/auth/login")
 def login(data: LoginIn, db: Session=Depends(db_session)):
     alum=db.scalar(select(Alumni).where(Alumni.email==data.email))
     if not alum or not verify_password(data.password,alum.password_hash): raise HTTPException(401,"Incorrect email or password")
-    return {"access_token":token_for(alum),"token_type":"bearer","user":public(alum)}
+    return {"access_token":token_for(alum),"token_type":"bearer","user":private(alum)}
 @app.get("/api/me")
-def me(user: Alumni=Depends(current_user)): return public(user)
+def me(user: Alumni=Depends(current_user)): return private(user)
 @app.patch("/api/me")
 def update_me(data: ProfileUpdate, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
     for k,v in data.model_dump(exclude_unset=True).items(): setattr(user,k,v)
-    db.commit(); db.refresh(user); return public(user)
+    db.commit(); db.refresh(user); return private(user)
 @app.get("/api/alumni")
 def directory(q: str="", batch: Optional[int]=None, db: Session=Depends(db_session), _: Alumni=Depends(current_user)):
     stmt=select(Alumni).where(Alumni.directory_visible != "private")
@@ -166,6 +241,91 @@ def accept_connection(connection_id: int, db: Session=Depends(db_session), user:
     row.status = "accepted"; db.commit(); db.refresh(row)
     other = db.get(Alumni, row.requester_id)
     return connection_public(row, other)
+
+def message_public(row: Message, viewer_id: int, db: Session):
+    other = db.get(Alumni, row.recipient_id if row.sender_id == viewer_id else row.sender_id)
+    return {"id": row.id, "body": row.body, "created_at": row.created_at, "outgoing": row.sender_id == viewer_id, "other": public(other) if other else None}
+
+@app.get("/api/messages")
+def messages(db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    rows = db.scalars(select(Message).where(or_(Message.sender_id == user.id, Message.recipient_id == user.id)).order_by(Message.created_at.desc()).limit(200)).all()
+    return [message_public(row, user.id, db) for row in rows]
+
+@app.post("/api/messages", status_code=status.HTTP_201_CREATED)
+def send_message(data: MessageIn, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    if data.recipient_id == user.id: raise HTTPException(400, "You cannot send a message to yourself")
+    if not db.get(Alumni, data.recipient_id): raise HTTPException(404, "Recipient not found")
+    row = Message(sender_id=user.id, recipient_id=data.recipient_id, body=data.body.strip())
+    db.add(row); db.commit(); db.refresh(row)
+    return message_public(row, user.id, db)
+
+def group_public(row: Group, user_id: int, db: Session):
+    members = db.scalars(select(GroupMembership).where(GroupMembership.group_id == row.id)).all()
+    return {"id": row.id, "name": row.name, "description": row.description, "created_at": row.created_at, "member_count": len(members), "joined": any(item.alumni_id == user_id for item in members)}
+
+@app.get("/api/groups")
+def groups(db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    return [group_public(row, user.id, db) for row in db.scalars(select(Group).order_by(Group.created_at.desc())).all()]
+
+@app.post("/api/groups", status_code=status.HTTP_201_CREATED)
+def create_group(data: GroupIn, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    if db.scalar(select(Group).where(Group.name.ilike(data.name.strip()))): raise HTTPException(409, "A group with that name already exists")
+    row = Group(name=data.name.strip(), description=data.description.strip(), owner_id=user.id)
+    db.add(row); db.flush(); db.add(GroupMembership(group_id=row.id, alumni_id=user.id)); db.commit(); db.refresh(row)
+    return group_public(row, user.id, db)
+
+@app.post("/api/groups/{group_id}/join")
+def join_group(group_id: int, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    row = db.get(Group, group_id)
+    if not row: raise HTTPException(404, "Group not found")
+    if not db.scalar(select(GroupMembership).where(GroupMembership.group_id == group_id, GroupMembership.alumni_id == user.id)):
+        db.add(GroupMembership(group_id=group_id, alumni_id=user.id)); db.commit()
+    return group_public(row, user.id, db)
+
+def event_public(row: Event, user_id: int, db: Session):
+    rsvps = db.scalars(select(EventRsvp).where(EventRsvp.event_id == row.id)).all()
+    return {"id": row.id, "title": row.title, "details": row.details, "location": row.location, "starts_at": row.starts_at, "created_at": row.created_at, "rsvp_count": len(rsvps), "rsvped": any(item.alumni_id == user_id for item in rsvps)}
+
+@app.get("/api/events")
+def events(db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    return [event_public(row, user.id, db) for row in db.scalars(select(Event).order_by(Event.starts_at.asc())).all()]
+
+@app.post("/api/events", status_code=status.HTTP_201_CREATED)
+def create_event(data: EventIn, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    row = Event(title=data.title.strip(), details=data.details.strip(), location=data.location.strip(), starts_at=data.starts_at, created_by=user.id)
+    db.add(row); db.commit(); db.refresh(row)
+    return event_public(row, user.id, db)
+
+@app.post("/api/events/{event_id}/rsvp")
+def rsvp_event(event_id: int, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    row = db.get(Event, event_id)
+    if not row: raise HTTPException(404, "Event not found")
+    if not db.scalar(select(EventRsvp).where(EventRsvp.event_id == event_id, EventRsvp.alumni_id == user.id)):
+        db.add(EventRsvp(event_id=event_id, alumni_id=user.id)); db.commit()
+    return event_public(row, user.id, db)
+
+def opportunity_public(row: Opportunity, user_id: int, db: Session):
+    applied = db.scalar(select(OpportunityApplication).where(OpportunityApplication.opportunity_id == row.id, OpportunityApplication.alumni_id == user_id)) is not None
+    return {"id": row.id, "title": row.title, "company": row.company, "description": row.description, "location": row.location, "employment_type": row.employment_type, "created_at": row.created_at, "applied": applied}
+
+@app.get("/api/opportunities")
+def opportunity_list(db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    return [opportunity_public(row, user.id, db) for row in db.scalars(select(Opportunity).order_by(Opportunity.created_at.desc())).all()]
+
+@app.post("/api/opportunities", status_code=status.HTTP_201_CREATED)
+def create_opportunity(data: OpportunityIn, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    row = Opportunity(title=data.title.strip(), company=data.company.strip(), description=data.description.strip(), location=data.location.strip(), employment_type=data.employment_type.strip(), created_by=user.id)
+    db.add(row); db.commit(); db.refresh(row)
+    return opportunity_public(row, user.id, db)
+
+@app.post("/api/opportunities/{opportunity_id}/apply")
+def apply_opportunity(opportunity_id: int, data: ApplicationIn, db: Session=Depends(db_session), user: Alumni=Depends(current_user)):
+    row = db.get(Opportunity, opportunity_id)
+    if not row: raise HTTPException(404, "Opportunity not found")
+    if db.scalar(select(OpportunityApplication).where(OpportunityApplication.opportunity_id == opportunity_id, OpportunityApplication.alumni_id == user.id)):
+        raise HTTPException(409, "You have already applied for this opportunity")
+    db.add(OpportunityApplication(opportunity_id=opportunity_id, alumni_id=user.id, note=data.note.strip()))
+    db.commit(); return opportunity_public(row, user.id, db)
 @app.get("/api/admin/overview")
 def admin_overview(db: Session=Depends(db_session), _: Alumni=Depends(admin_only)):
     people=db.scalars(select(Alumni)).all()

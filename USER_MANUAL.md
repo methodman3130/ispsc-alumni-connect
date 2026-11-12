@@ -68,24 +68,23 @@ The dashboard is meant to give you a quick picture of the community:
 - **Upcoming events** and **Opportunities** introduce community activities and
   career-related posts.
 
-The event and opportunity cards are currently announcements for the demo
-release. You can read them, but registration, posting, and application actions
-will be added in a later update.
+## Sharing with the community
 
-## Features that are still being prepared
+The rest of the menu is now active too:
 
-You will see **Messages**, **Groups**, **Profile**, and **Settings** in the
-menu. They are included so members can see where the service is heading, but
-they are not active yet. In the current version:
+- **Messages** lets you send a private note to another directory member.
+- **Groups** lets you create a community space or join one that is already
+  available.
+- **Events** lets members publish an event and RSVP to attend.
+- **Opportunities** lets members post a role, project, internship, or
+  collaboration and lets others register their interest.
+- **Profile** is where you can add your batch, work details, location, and a
+  short introduction.
+- **Settings** lets you hide your profile from the directory if you prefer to
+  keep it private.
 
-- private messaging is not available;
-- groups cannot yet be joined or created;
-- profile editing and directory-privacy controls are not yet available in the
-  screen; and
-- event suggestions and opportunity sharing do not yet save anything.
-
-For now, use the directory and connections area for the working community
-features.
+Posts, group memberships, RSVP choices, applications, messages, profile
+changes, and directory preferences are saved to your account.
 
 ## A few good habits
 
